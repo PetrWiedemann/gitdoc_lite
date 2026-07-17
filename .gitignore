@@ -1,0 +1,12 @@
+# NPM závislosti
+node_modules/
+
+# VitePress vygenerované statické soubory
+docs/.vitepress/dist/
+
+# VitePress dočasná cache
+docs/.vitepress/cache/
+
+# Ostatní běžné systémové soubory (Mac/Windows)
+.DS_Store
+Thumbs.db

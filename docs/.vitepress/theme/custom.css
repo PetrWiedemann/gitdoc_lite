@@ -1,0 +1,63 @@
+/* custom.css - Přepis stylů pro Mermaid diagramy */
+
+/* Úprava kontejneru */
+.mermaid {
+  background: var(--vp-c-bg-soft);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  margin: 2rem 0;
+  box-shadow: 0 8px 16px var(--vp-c-divider);
+}
+
+/* Nativní obarvení POUZE hlavních uzlů (nodes) */
+.mermaid .node rect, 
+.mermaid .node polygon {
+  fill: var(--vp-c-bg-alt) !important;
+  stroke: var(--vp-c-border) !important;
+  rx: 6px !important;
+  ry: 6px !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Obarvení textu uvnitř uzlů (řeší problém se zmizením textu) */
+.mermaid .node text,
+.mermaid .node .label,
+.mermaid .node span {
+  fill: var(--vp-c-text-1) !important;
+  color: var(--vp-c-text-1) !important;
+  font-family: var(--vp-font-family-base) !important;
+}
+
+/* Obarvení a tloušťka spojovacích šipek */
+.mermaid path.transition,
+.mermaid .messageLine0, 
+.mermaid .messageLine1 {
+  stroke: var(--vp-c-brand-1) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Šipky samotné (hroty) */
+.mermaid marker path {
+  fill: var(--vp-c-brand-1) !important;
+  stroke: var(--vp-c-brand-1) !important;
+}
+
+/* Popisky na šipkách (pozadí) */
+.mermaid .edgeLabel, 
+.mermaid .edgeLabel rect {
+  background-color: var(--vp-c-bg-soft) !important;
+  fill: var(--vp-c-bg-soft) !important;
+  border-radius: 4px !important;
+}
+
+/* Popisky na šipkách (text) */
+.mermaid .edgeLabel text,
+.mermaid .edgeLabel span,
+.mermaid .edgeTerm {
+  fill: var(--vp-c-brand-1) !important;
+  color: var(--vp-c-brand-1) !important;
+  font-weight: 600 !important;
+  font-size: 0.9em !important;
+  font-family: var(--vp-font-family-base) !important;
+}
