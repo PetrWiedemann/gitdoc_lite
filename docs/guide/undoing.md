@@ -52,7 +52,7 @@ Posune ukazatel, smaže Staging zónu, ale soubory na disku nechá upravené. Ty
 git reset --hard HEAD~2
 ```
 > [!CAUTION] Nevratná operace
-> Posune ukazatel historie a **brutálně zahodí všechno**. Váš pracovní adresář i index bude přesně odpovídat starému commitu. Všechno, co jste vytvořili a naprogramovali po tomto bodě v čase, se doslova vypaří z disku. Pokud to nebylo aspoň v nějakém jiném commitu nebo stashi, je to ztraceno (pokud nepoužijete reflog).
+> Posune ukazatel historie a **brutálně zahodí všechno**. Váš pracovní adresář i index bude přesně odpovídat starému commitu. Všechno, co jste vytvořili a naprogramovali po tomto bodě v čase, se doslova vypaří z disku. Pokud to nebylo aspoň v nějakém jiném commitu nebo stashi, je to ztraceno **zcela nevratně**. (Pozor: Často zmiňovaný Reflog zachraňuje pouze commitnutou práci; smazané necommitnuté změny Reflog nijak nevrátí).
 
 ### Vyčištění nesledovaných (untracked) souborů: `git clean`
 Příkazy `restore` i `reset --hard` ovlivňují pouze soubory, které už Git zná (verzuje je). Pokud jste během testování vytvořili spoustu nových dočasných souborů nebo složek, `reset --hard` je na disku nechá ležet. Abyste smazali i tyto nadbytečné soubory a získali čistý repozitář, použijte:
@@ -70,3 +70,13 @@ V takovém případě musíte chybu vzít zpět tak, že vytvoříte **nový com
 git revert <hash-toho-spatneho-commitu>
 ```
 Git se podívá, co špatný commit přidal nebo smazal, a vygeneruje patch, který přidá, co bylo smazáno, a smaže, co bylo přidáno. Následně vygeneruje nový commit s názvem např. `Revert "Rozbití produkce"`. Vaše historie neustále roste dopředu, nikomu to nerozbije synchronizaci, ale chyba je z kódu odstraněna.
+
+### Revertování Merge Commitu (Past)
+Pokud chyba vznikla tak, že jste omylem do `main` slili (`merge`) obrovskou a rozbitou feature větev, a chcete tento merge zrušit, narazíte na problém. Merge commit má totiž dva rodiče. Když mu řeknete `git revert <hash>`, Git neví, ke kterému z těch dvou rodičů se má vracet (zda zanechat kód z větve `main` nebo z té `feature` větve). Musíte mu explicitně říct, kterou větev považujete za tu "hlavní" (obvykle rodič číslo 1).
+
+```bash
+git revert -m 1 <hash-merge-commitu>
+```
+
+> [!WARNING] Zrádná past znovusloučení
+> Pokud `feature` větev takto revertnete, chybný kód z produkce sice zmizí, ale z pohledu Gitu je tato `feature` větev navždy označená jako "už byla sloučena a následně revertnuta". Pokud kolega tu `feature` větev opraví a zkusíte ji slít do `main` podruhé, Git ty původní opravené soubory bude **ignorovat**! Pro znovusloučení byste museli nejprve "revertnout samotný revert commit". Je to velmi složitá past pro pokročilé. Mnohem bezpečnější pro týmy bývá provést na dané větvi další opravné commity a slít je bez revertu.

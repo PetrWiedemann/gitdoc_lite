@@ -10,6 +10,7 @@ Vytvoří nový prázdný repozitář (skrytou složku `.git`) v aktuálním adr
 ### `git clone <url>`
 Stáhne existující repozitář ze serveru k vám na disk. Obsahuje i kompletní historii.
 *   `git clone <url> <slozka>` - Zklonuje do specifické složky.
+*   `git clone --depth 1 <url>` - tzv. **Shallow clone**. Stáhne pouze úplně poslední snapshot souborů bez dlouhé historie. Užívá se na CI/CD serverech pro masivní urychlení stahování.
 
 ### `git config`
 Získání nebo nastavení konfiguračních proměnných.
@@ -42,6 +43,7 @@ Přejmenuje nebo přesune soubor.
 ### `git log`
 Zobrazí chronologickou historii commitů.
 *   `git log --oneline --graph --all` - Přehledné grafické zobrazení stromu.
+*   `git log --follow <soubor>` - Extrémně užitečné. Zobrazí historii úprav konkrétního souboru, i když byl v minulosti přejmenován (standardní log u přejmenování ztratí stopu).
 
 ### `git diff`
 Zobrazí rozdíly v obsahu souborů. Bez parametrů porovnává Working Directory proti Staging Area.
@@ -52,6 +54,9 @@ Zobrazí informace o konkrétním commitu a změny (diff), které tento commit p
 
 ### `git blame <soubor>`
 Vypíše soubor řádek po řádku s informací, kdo, kdy a ve kterém commitu daný řádek naposledy upravil.
+
+### `git describe`
+Vezme váš aktuální commit a najde k němu nejbližší předchozí Tag (např. v1.0). Výstupem je čitelný string typu `v1.0-4-g923abc` (znamená: stojíš 4 commity za verzí 1.0 a hash je 923abc). Ideální pro generování verze do buildů aplikací.
 
 ## Větvení a Sloučení
 
@@ -92,16 +97,23 @@ Odešle vaše lokální commity z větve na vzdálený server.
 *   `git push -u origin <větev>` - Při prvním poslání nové větve propojí lokální větev se serverem.
 *   `git push --force-with-lease` - Bezpečný přepis historie na serveru.
 
+### `git bundle`
+Vezme komprimované Git objekty a větve a sbalí je do jednoho fyzického `.bundle` souboru, který pak můžete nahrát na flashku a donést do jiné sítě. Tento soubor se chová jako "offline server" a lze z něj klasicky klonovat nebo pullit.
+
+### `git sparse-checkout`
+Pokud pracujete s gigantickým monorepem (miliony souborů), můžete Gitu přes sparse-checkout říct, ať vám na disk fyzicky stáhne jen složku `/frontend` a zbytek nechá ležet pouze v databázi, čímž ušetříte čas i místo na disku.
+
 ## Odstraňování chyb
 
 ### `git restore <soubor>`
 Zahodí neuložené změny v souboru z pracovního adresáře a nahradí je poslední známou komitovanou verzí.
+*   `git restore --source <hash> <soubor>` - Nevytáhne aktuální verzi z `HEAD`, ale vyloví soubor tak, jak vypadal v naprosto jakémkoliv historickém commitu. Skvělé k záchraně dávno přepsaného kódu v jednom souboru.
 
 ### `git reset <commit>`
 Posune celou větev zpět v čase.
 *   `--soft`: Ponechá změny na disku a v indexu.
 *   `--mixed`: (Výchozí) Ponechá změny na disku, smaže index.
-*   `--hard`: Smaže úplně všechno od daného commitu až po současnost. Změny nenávratně zmizí.
+*   `--hard`: Smaže úplně všechno od daného commitu až po současnost. Komitované změny lze zachránit jedině přes Reflog, nekomitované zmizí nenávratně.
 
 ### `git revert <commit>`
 Vytvoří nový commit, který dělá přesný opak specifikovaného špatného commitu. Bezpečné pro použití po sdílení kódu.

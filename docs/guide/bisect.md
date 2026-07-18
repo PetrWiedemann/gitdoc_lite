@@ -57,4 +57,4 @@ git bisect reset
 > [!TIP] Automatický bisect
 > Pokud pro detekci chyby nemusíte klikat v UI, ale máte automatizovaný skript nebo Unit Test (např. `npm run test:button`), nemusíte kroky ručně odklikávat! Můžete zadat:
 > `git bisect run npm run test:button`
-> Git provede celých např. 1000 testů plně automaticky za pár vteřin a na konci vám prostě vyplivne SHA-1 hledaného špatného commitu. Je to neuvěřitelně mocné.
+> Git provede testování plně automaticky. Místo 1000 testů mu ale díky logaritmickému půlení (vždy otestuje půlku, zbytek zahodí) stačí provést pouhých cca 10 testů a na konci vám prostě vyplivne SHA-1 hledaného špatného commitu. Je to neuvěřitelně rychlé a mocné.

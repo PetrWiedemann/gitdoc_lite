@@ -31,10 +31,19 @@ git stash pop
 ```
 Tento příkaz vytáhne nejnovější obsah ze šuplíku, aplikuje ho do vašeho aktuálního pracovního adresáře (získáte zpět všechny modifikované soubory) a následně onen **záznam ze šuplíku trvale smaže**.
 
+> [!WARNING] Stash Pop s konfliktem
+> Pokud `git stash pop` narazí na to, že vaše současná složka obsahuje kód, který je v konfliktu s tím ze šuplíku (změnili jste mezitím stejné řádky), Git aplikuje změny, vyhlásí konflikt k ručnímu řešení, ale **záznam ve stashi nesmaže**. Bude ho pro jistotu brát jako cennou zálohu, dokud ho sami nevymažete.
+
 ### 2. Aplikovat a ponechat (Apply)
 Pokud chcete změny aplikovat, ale v šuplíku si je nechat jako zálohu (nebo je plánujete aplikovat ještě i do jiné větve):
 ```bash
 git stash apply
+```
+
+### Záchrana stavu "Staging area" (Indexu)
+Ať už použijete `pop` nebo `apply`, Git se při navrácení souborů ze šuplíku neobtěžuje tím, aby zjistil, které soubory byly tehdy "připraveny v košíku" (`git add`). **Všechny obnoví jako Unstaged.** To je nepříjemné, pokud jste měli precizně na-stagované vybrané řádky. Abyste si zachovali i stav indexu přesně tak, jak byl před `git stash`, musíte k `pop` nebo `apply` přidat parametr `--index`:
+```bash
+git stash pop --index
 ```
 
 ## Práce s více věcmi ve stashi

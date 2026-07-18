@@ -35,6 +35,12 @@ git push origin v1.0     # Jeden tag
 git push origin --tags   # Všechny tagy
 ```
 
+**Smazání tagu:**
+Pokud se spletete a chcete tag lokálně smazat, než ho někam pošlete:
+```bash
+git tag -d v1.0
+```
+
 ## 3. Repozitář v repozitáři: `git submodule`
 
 Máte hlavní projekt, a ten závisí na jiné knihovně, která je vyvíjena v úplně cizím Git repozitáři (a vy z ní nechcete dělat běžný npm nebo maven balíček, protože do ní chcete i zapisovat kód). Submodul dovoluje mít jeden Git repozitář uvnitř podadresáře jiného Git repozitáře.
@@ -60,6 +66,9 @@ git submodule update --init --recursive
 **Práce uvnitř submodulu a nástraha "Detached HEAD":**
 Když vejdete do složky submodulu, funguje to tam jako samostatný Git. Pokud dáte uvnitř `git pull` nebo `git checkout`, je velmi snadné se dostat do stavu *Detached HEAD* (Neukotvený HEAD), kdy pracujete "ve vzduchoprázdnu" mimo jakoukoliv větev. Než začnete uvnitř submodulu cokoliv měnit a komitovat, **vždy se nejprve ujistěte, že jste si checkoutnuli lokální větev** (např. `git switch main`), jinak se vaše nové commity po nejbližší nadřazené aktualizaci "ztratí" (nikam se nepropíší).
 
+> [!WARNING] Zrádná past: Zapomenutý push submodulu
+> Pokud změníte kód v submodulu a komitnete ho, musíte udělat dva push příkazy! Nejprve musíte udělat `git push` přímo ve složce submodulu a teprve **potom** `git push` v hlavním repozitáři (který zaznamenává onen posunutý ukazatel na hash submodulu). Pokud nahrajete hlavní repozitář a zapomenete nahrát submodul, **kompletně tím rozbijete projekt úplně všem kolegům**, protože Git u nich uvidí, že hlavní repozitář vyžaduje po submodulu konkrétní nový hash, který ale nikde na serveru neexistuje.
+
 ## 4. Více pracovních adresářů najednou: `git worktree`
 
 Běžně máte jeden repozitář `.git` a jeden pracovní adresář. Pokud pracujete na větvi `feature` a šéf po vás chce opravit chybu v `main`, musíte udělat `git stash` (nebo commit), přepnout na `main`, opravit, komitnout, vrátit se.
@@ -72,10 +81,13 @@ Pokud je projekt obrovský, přepnutí větve může trvat dlouho (rekompilace v
 # Vytvoří vedle stávající složky novou a checkoutne v ní větev hotfix
 git worktree add ../projekt-hotfix hotfix
 ```
-Když dopracujete, stačí složku na disku smazat a spustit `git worktree prune`.
+Když dopracujete, smazání provedete čistě takto (nesmažte jen složku natvrdo):
+```bash
+git worktree remove ../projekt-hotfix
+```
 
 > [!WARNING] Omezení Worktree
-> U worktrees existuje jedno zásadní omezení: **Nemůžete mít jednu konkrétní větev (např. `main`) aktivní ("checkoutnutou") ve dvou různých worktree složkách najednou.** Git tím chrání souborový systém před poškozením. Pokud se pokusíte přejít na větev, která už je zapnutá v jiné složce, Git vás zastaví.
+> U worktrees existuje jedno zásadní omezení: **Nemůžete mít jednu konkrétní větev (např. `main`) aktivní ("checkoutnutou") ve dvou různých worktree složkách najednou.** Git tím chrání konzistenci větve a ukazatele HEAD (aby nenastal stav, kdy jedna větev ukazuje na dva různé commity v různých složkách). Pokud se pokusíte přejít na větev, která už je zapnutá v jiné složce, Git vás zastaví.
 
 ## 5. Verzování velkých binárních souborů: Git LFS (Large File Storage)
 
@@ -105,6 +117,11 @@ Zkratka `rerere` znamená *"Reuse Recorded Resolution"* (Znovupoužití zaznamen
 Představte si rozsáhlou "feature" větev, na které děláte čtvrt roku a kterou se každý týden snažíte udržovat aktuální s hlavní větví `main` pomocí merge. Bohužel vám ale neustále vyskakuje jeden a ten samý komplikovaný konflikt (např. rozsáhlé přeformátování souboru od kolegy), který musíte dokola manuálně řešit pokaždé, když si `main` k sobě stahujete.
 
 Když si v Gitu zapnete `rerere`, Git si pokaždé, když nějaký konflikt manuálně vyřešíte, tento konflikt tajně "vyfotí" (uloží si před a po stav). Pokud narazí na úplně identický konflikt někdy v budoucnu (při rebase, při merge, při cherry-picku), **vyřeší ho za vás zcela automaticky** a vám na obrazovku jen napíše "*Resolved using previous resolution*".
+
+Pro maximální komfort si můžete zapnout i to, aby Git takto vyřešený soubor rovnou přidal do Staging area (ušetříte si psaní `git add` po vyřešení rerere):
+```bash
+git config --global rerere.autoUpdate true
+```
 
 Aktivace pro konkrétní repozitář:
 ```bash

@@ -17,7 +17,7 @@ features:
   - title: Extrémní detail
     details: Každý koncept Gitu je vysvětlen do hloubky. Nejen jak příkazy použít, ale proč a jak fungují uvnitř.
   - title: Kompletní reference
-    details: Obsahuje dokumentaci ke VŠEM příkazům Gitu. Běžné uživatelské (porcelain) i interní (plumbing).
+    details: Obsahuje dokumentaci k nejběžnějším a nejdůležitějším příkazům Gitu. Běžné uživatelské (porcelain) i interní (plumbing).
   - title: Řešení problémů
     details: Rychle najdete odpověď na otázky "jak zruším...", "jak opravím..." a "kam se poděl můj kód?".
   - title: Firemní nasazení

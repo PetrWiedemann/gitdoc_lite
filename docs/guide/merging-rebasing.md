@@ -42,10 +42,11 @@ git rebase main
 **Co Git udělá?**
 1. Najde nejbližšího společného předka větve `feature` a `main`.
 2. Vezme všechny vaše commity od onoho předka a dočasně si je uloží bokem.
-3. Posune vaši větev `feature` tak, aby ukazovala přesně na aktuální vrchol větve `main`.
+3. Přesune interní ukazatel `HEAD` přesně na aktuální vrchol větve `main`.
 4. Jeden po druhém aplikuje uložené commity na tento nový základ.
+5. Až když jsou všechny commity úspěšně aplikovány, teprve přesune ukazatel vaší větve `feature` na konec této nové linie. (Právě proto při konfliktu můžete operaci přerušit přes `--abort` a vaše původní větev se vůbec nezmění, protože Git s ní hýbe až úplně nakonec).
 
-Vaše historie teď vypadá naprosto lineárně. Jako byste ty commity napsali až potom, co kolega updatoval `main`. Ale pozor: **Git původní commity zahodil a vygeneroval úplně nové** (s úplně novými SHA-1 hashi, protože se změnil jejich rodič, obsah, i čas vytvoření).
+Vaše historie teď vypadá naprosto lineárně. Jako byste ty commity napsali až potom, co kolega updatoval `main`. Ale pozor: **Git původní commity zahodil a vygeneroval úplně nové** (s úplně novými SHA-1 hashi, protože se změnil jejich rodič a čas vytvoření, ačkoliv vnitřní změny kódu zůstaly stejné).
 
 Z větve `feature` se teď můžete přepnout na `main` a udělat rychlý `git merge feature` – stane se z toho čistý Fast-forward.
 

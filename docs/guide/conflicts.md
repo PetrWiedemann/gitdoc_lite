@@ -24,9 +24,13 @@ Pokud se tak stane, Git status vám červeně oznámí `Unmerged paths`. Pokud t
 ```
 
 Rozbor bloku:
-1.  **`<<<<<<< HEAD`**: Toto označuje začátek *vaší* úpravy. HEAD je větev, do které se právě teď snažíte slučovat data (tedy většinou ta, na které stojíte).
+1.  **`<<<<<<< HEAD` (Ours - Naše strana)**: Toto označuje začátek *vaší* úpravy. HEAD je vždy větev nebo commit, do kterého se právě teď snažíte slučovat data (základ, na kterém stojíte).
 2.  **`=======`**: Toto je oddělovač. Odděluje vaši verzi (nahoře) od cizí verze (dole).
-3.  **`>>>>>>> feature-menu`**: Toto je označení konce bloku. Takto tento řádek upravila větev `feature-menu` (ta, kterou si snažíte k sobě přitáhnout).
+3.  **`>>>>>>> feature-menu` (Theirs - Jejich strana)**: Toto je označení konce bloku. Takto tento řádek upravila větev `feature-menu` (ta, kterou si snažíte k sobě přitáhnout).
+
+> [!CAUTION] Obrovská past při Rebase
+> Pokud konflikt vznikne v důsledku `git rebase` namísto `git merge`, **strany se prohodí!**
+> Připomeňme si, co rebase dělá: vezme vaši větev, přesune její HEAD na větev `main` a pak na ni začne "nahrávat" (přehrávat) vaše commity jako příchozí. V ten moment se **`HEAD` (Ours)** stává kódem z větve `main`, a **`Theirs` (příchozí změny)** se stávají kódem z vaší "feature" větve. Je to nejčastější důvod, proč si vývojáři při řešení konfliktů v Rebase omylem smažou svůj vlastní kód – prostě si ty dvě strany prohodí. Pamatujte: při Rebase je `HEAD` to, na co se nasedá (základ).
 
 ## Jak konflikt vyřešit?
 

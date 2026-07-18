@@ -4,7 +4,7 @@ Před tím, než začnete verzovat kód, musíte mít repozitář (bezpečné ú
 
 ## 1. Konfigurace: git config
 
-Když Git zaznamenává změny (commity), ukládá do nich vaše jméno a e-mailovou adresu. Toto je nevratné a je to pevnou součástí samotného objektu commitu. Z tohoto důvodu je nutné toto nastavit úplně nejdřív.
+Když Git zaznamenává změny (commity), ukládá do nich vaše jméno a e-mailovou adresu. Toto jméno a e-mail se stávají pevnou součástí kryptografického hashe samotného objektu commitu. Bez složitého přepisování historie (např. pomocí pokročilého `rebase` nebo nástroje `git filter-repo`) je nelze zpětně změnit. Z tohoto důvodu je nutné toto nastavit úplně nejdřív.
 
 Nástroj, kterým se to dělá, se jmenuje `git config`.
 
@@ -75,7 +75,7 @@ Zatímco známější `.gitignore` (který Gitu říká, kterých souborů si ne
 
 Nejčastější a nejkritičtější použití je **zalamování řádků (Line Endings)**. Windows používá pro konec řádku znaky `CRLF`, zatímco Linux a macOS používají pouze `LF`. Pokud v týmu pracují lidé na různých systémech, Git by neustále hlásil obrovské falešné změny na každém řádku, protože by se "praly" konce řádků z různých editorů.
 
-Vytvořením souboru `.gitattributes` toto elegantně a bezúdržbově vyřešíte:
+Dříve se to řešilo globálním nastavením `git config --global core.autocrlf true`, což ale působilo zmatky, protože každý vývojář to mohl mít nastaveno jinak. Dnes je jediným správným řešením vytvoření souboru `.gitattributes`, čímž se pravidla vynutí pro všechny automaticky:
 ```text
 # Pokaždé převést textové soubory na LF při nahrání do Gitu (do databáze)
 # ale při stažení zpět na Windows je pro lokální editory automaticky konvertovat na CRLF.
@@ -85,3 +85,11 @@ Vytvořením souboru `.gitattributes` toto elegantně a bezúdržbově vyřeší
 *.sh text eol=lf
 ```
 Tímto jediným souborem zabráníte množství budoucích komplikací při spolupráci ve smíšených týmech.
+
+> [!TIP] Dodatečná náprava: Renormalizace
+> Pokud jste do projektu přidali soubor `.gitattributes` až dodatečně, nebo jste zjistili, že už máte v databázi nahrané nesprávné konce řádků (CRLF) a všechny soubory najednou "svítí" jako upravené, stačí spustit tzv. renormalizaci:
+> ```bash
+> git add --renormalize .
+> git commit -m "Normalizace konců řádků na čisté LF"
+> ```
+> Git celý adresář přečte znovu a tvrdě aplikuje pravidla z `.gitattributes`.

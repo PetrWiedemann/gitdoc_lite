@@ -10,7 +10,7 @@ A přesně proto existuje **Reflog (Reference Log)** - hlavní záchranná síť
 
 ## Co je to Reflog?
 
-Git si na pozadí, na vašem lokálním stroji, zapisuje deníček. Tento deníček si eviduje **každý pohyb ukazatele HEAD**, ke kterému došlo za posledních cca 30 dní.
+Git si na pozadí, na vašem lokálním stroji, zapisuje deníček. Tento deníček si eviduje **každý pohyb ukazatele HEAD** i jednotlivých větví (např. `main@{1}`), ke kterému došlo za posledních 90 dní (výchozí expirace dosažitelných záznamů).
 
 Přepnuli jste větev? Do deníčku. Udělali jste commit? Do deníčku. Udělali jste hrůzný omyl v podobě `git reset --hard HEAD~5` a smazali jste si práci? Do deníčku.
 
@@ -23,7 +23,7 @@ Výstup bude vypadat jako magie:
 8b2d45c (HEAD -> main) HEAD@{0}: reset: moving to HEAD~2
 a1b2c3d HEAD@{1}: commit: Funkce generování PDF
 9f8e7d6 HEAD@{2}: checkout: moving from test to main
-4x3y2z1 HEAD@{3}: commit (amend): Oprava login stránky
+d4e5f6a HEAD@{3}: commit (amend): Oprava login stránky
 ```
 
 Přečtěme si výše uvedený log z pohledu vývojáře. Vidíme (úplně nahoře), že jsme před chvílí omylem udělali reset a stojíme teď na commitu `8b2d45c`. Jenže vidíme i to, že těsně před tou chybou (`HEAD@{1}`) jsme udělali rozsáhlý a pracný commit "Funkce generování PDF" s hashem `a1b2c3d`.

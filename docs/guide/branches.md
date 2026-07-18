@@ -60,7 +60,7 @@ git branch -D nova-funkce
 ```
 
 ## Odpojená hlava (Detached HEAD)
-Pokud zkusíte příkazem `git switch <hash-commitu>` (nebo `checkout`) skočit na konkrétní starý commit v historii (místo na jméno větve), dostanete se do stavu **Detached HEAD**.
+Pokud zkusíte příkazem `git switch --detach <hash-commitu>` (nebo `git checkout <hash-commitu>`) skočit na konkrétní starý commit v historii (místo na jméno větve), dostanete se do stavu **Detached HEAD**. U příkazu switch je parametr `--detach` nutný, jinak se zobrazí chyba.
 
 Znamená to, že ukazatel HEAD už neukazuje na jméno žádné větve (jako `main`), ale ukazuje přímo na surový SHA-1 hash commitu.
 Můžete se tu rozhlížet, zkoušet, jak kód fungoval dřív. Ale **pokud zde vytvoříte nový commit, nepřipojí se na žádnou větev**. Jakmile se přepnete zpět na `main`, tyto nové commity se v podstatě "ztratí v prostoru" (a časem je sebere Garbage Collector), protože na ně nebude ukazovat žádná větev, přes kterou byste je našli (zachránit by vás mohl jen `git reflog`).

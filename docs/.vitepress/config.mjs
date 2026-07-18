@@ -60,6 +60,7 @@ export default withMermaid(defineConfig({
         text: 'Část 2: Začínáme s vývojem',
         collapsed: false,
         items: [
+          { text: 'Autentizace a přístup', link: '/guide/authentication' },
           { text: 'Denní rutiny a Tahák', link: '/guide/cheat-sheet' },
           { text: 'Konfigurace a Inicializace', link: '/guide/getting-started' },
           { text: 'Práce se soubory a historie', link: '/guide/basic-workflow' },
@@ -72,7 +73,8 @@ export default withMermaid(defineConfig({
         items: [
           { text: 'Větve a HEAD', link: '/guide/branches' },
           { text: 'Slučování (Merge) vs Rebase', link: '/guide/merging-rebasing' },
-          { text: 'Odkládání práce (Stash)', link: '/guide/stash' }
+          { text: 'Odkládání práce (Stash)', link: '/guide/stash' },
+          { text: 'Ukazování na commity (Revize)', link: '/guide/revisions' }
         ]
       },
       {

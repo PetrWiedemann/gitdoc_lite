@@ -128,6 +128,8 @@ git reset --hard HEAD~2
 Zčervenal vám terminál a soubory mají v sobě podivné značky `<<<<<<<`. Zkuste konflikt vyřešit ručně, ale pokud se v tom ztratíte a chcete z toho procesu odstoupit:
 ```bash
 git merge --abort
+# nebo pokud používáte rebase:
+git rebase --abort
 ```
 Všechny ty konfliktní značky z kódu zmizí a vy se vrátíte přesně do stavu před stažením dat z internetu.
 
@@ -136,5 +138,5 @@ Použijte Reflog. Git si píše deníček úplně všeho, i smazaných věcí.
 ```bash
 git reflog
 # Najděte hash akce, která proběhla TĚSNĚ PŘED vaším omylem (např. a1b2c3d)
-git reset --hard a1b2c3d
+git branch jmeno_obnovene_vetve a1b2c3d
 ```

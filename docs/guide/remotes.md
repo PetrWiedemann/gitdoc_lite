@@ -60,3 +60,23 @@ Pokud chcete vidět všechny lokální i vzdálené (remote-tracking) větve poh
 ```bash
 git branch -a
 ```
+
+## Mazání na vzdáleném serveru
+
+Lokální větve se mažou pomocí `git branch -d`. Pro smazání větve nebo tagu na vzdáleném serveru (např. na GitHubu) se používá příkaz `push` se speciálním parametrem `--delete`.
+
+**Smazání vzdálené větve:**
+```bash
+git push origin --delete <jmeno-vetve>
+```
+
+**Smazání vzdáleného tagu:**
+```bash
+git push origin --delete <jmeno-tagu>
+```
+
+> [!TIP] Úklid mrtvých duší: Fetch Prune
+> Pokud kolega smaže větev na GitHubu, vám po klasickém `git fetch` její zástupce `origin/jmeno-vetve` na disku **zůstane** navždy jako mrtvá duše. Abyste Gitu řekli, že má smazané větve ze serveru vymazat i z vašeho lokálního seznamu, použijte parametr prune:
+> ```bash
+> git fetch --prune
+> ```
