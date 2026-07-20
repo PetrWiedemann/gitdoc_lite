@@ -4,6 +4,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 export default withMermaid(defineConfig({
   title: "Průvodce Gitem",
   description: "Příručka a reference k verzovacímu systému Git",
+  base: '/gitdoc_lite/',
   lang: 'cs-CZ',
   appearance: 'dark',
   mermaid: {
